@@ -25,6 +25,20 @@ class User extends Authenticatable
     ];
 
     /**
+     * Função para verificar se o usuário possui um certo perfil.
+     */
+
+    public function hasProfile(string $profileName): bool
+    {
+        return $this->profiles()->where('name', $profileName)->exists();
+    }
+
+    public function profiles()
+    {
+        return $this->belongsToMany(Profile::class);
+    }
+
+    /**
      * The attributes that should be hidden for serialization.
      *
      * @var list<string>
