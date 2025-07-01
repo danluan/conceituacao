@@ -2,8 +2,6 @@ export interface User {
   id: number;
   name: string;
   email: string;
-  profileId: number;
-  createdAt: string;
   profiles: Profile[];
 }
 
@@ -24,7 +22,7 @@ export interface AuthResponse {
   accessToken: string;
 }
 
-export interface UpdateProfileData {
+export interface UpdateUserData {
   name?: string;
   email?: string;
   password?: string;

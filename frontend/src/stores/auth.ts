@@ -55,7 +55,6 @@ export const useAuthStore = defineStore('auth', () => {
       token.value = result.access_token
       localStorage.setItem('access_token', result.access_token)
 
-      // Carregar dados completos do usuário com perfis
       await checkAuth()
 
       showSuccess('Registro realizado com sucesso!')
@@ -98,7 +97,6 @@ export const useAuthStore = defineStore('auth', () => {
       token.value = result.access_token
       localStorage.setItem('access_token', result.access_token)
 
-      // Carregar dados completos do usuário com perfis
       await checkAuth()
 
       showSuccess('Login realizado com sucesso!')

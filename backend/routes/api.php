@@ -13,7 +13,7 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function() {
     Route::put('/user/{user}', [UserController::class, 'update']);
     Route::delete('/user/{user}', [UserController::class, 'destroy']);
     Route::post('/user/{user}/profile', [UserProfileController::class,'addProfile']);
-    Route::delete('/user/{user}/profile', [UserProfileController::class,'removeProfile']);
+    Route::delete('/user/{user}/profile/{profile}', [UserProfileController::class,'removeProfile']);
 });
 
 Route::middleware(['auth:sanctum', 'admin'])->group(function() {

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\User;
+use App\Models\Profile;
 
 use Illuminate\Http\Request;
 
@@ -44,12 +45,8 @@ class UserProfileController extends Controller
         }
     }
 
-    public function removeProfile(Request $request, User $user) {
-        $validated = $request->validate([
-            'profile_id' => 'required|exists:profiles,id',
-        ]);
-
-        $profileId = $validated['profile_id'];
+    public function removeProfile(Request $request, User $user, Profile $profile) {
+        $profileId = $profile->id;
 
         // Verificar se o usuário realmente possui o perfil antes de tentar remover
         if (!$user->hasProfileById($profileId)) {
@@ -59,7 +56,7 @@ class UserProfileController extends Controller
             ], 400);
         }
 
-        $user->profiles()->detach($profileId);
+        $user->profiles()->detach(['profile_id' => $profileId]);
 
         return response()->json([
             'message' => 'Perfil removido com sucesso.',

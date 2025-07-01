@@ -38,7 +38,7 @@ class User extends Authenticatable
      */
     public function hasProfileById(int $profileId): bool
     {
-        return $this->profiles()->where('id', $profileId)->exists();
+        return $this->profiles()->where('profile_id', $profileId)->exists();
     }
 
     /**

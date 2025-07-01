@@ -97,7 +97,10 @@ onMounted(fetchUsers)
     <div class="min-h-screen bg-gray-50">
         <Header title="Gerenciamento de Usuários" />
 
-        <div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div class="w-full flex justify-between max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <Button @click="$router.go(-1)" variant="link" size="lg">
+                Voltar
+            </Button>
             <Button @click="createProfile" class="mb-4">
                 Adicionar Perfil
             </Button>

@@ -21,19 +21,19 @@
                     </p>
                 </div>
                 
-                <div class="flex justify-end gap-3">
-                    <button
+                <div class="flex justify-between gap-3">
+                    <Button
                         type="button"
                         @click="close"
-                        class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+                        variant="outline"
                     >
                         Cancelar
-                    </button>
-                    <button
+                    </Button>
+                    <Button
                         type="button"
                         @click="confirm"
                         :disabled="loading"
-                        class="px-4 py-2 text-sm font-medium text-white bg-red-600 border border-transparent rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                        variant="destructive"
                     >
                         <span v-if="loading" class="flex items-center">
                             <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -45,7 +45,7 @@
                         <span v-else>
                             Confirmar
                         </span>
-                    </button>
+                    </Button>
                 </div>
             </div>
         </div>
@@ -53,6 +53,8 @@
 </template>
 
 <script setup lang="ts">
+import Button from '@/components/ui/button/Button.vue'
+
 interface Props {
     isVisible: boolean
     title: string

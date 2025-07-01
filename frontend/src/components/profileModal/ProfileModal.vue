@@ -1,3 +1,130 @@
+<script setup lang="ts">
+    import { ref, watch, computed } from 'vue'
+    import type { Profile } from '@/types/types'
+    import api from '@/services/api'
+    import { useToast } from '@/composables/useToast'
+
+    interface Props {
+        isVisible: boolean
+        profile?: Profile | null
+    }
+
+    interface Emits {
+        (e: 'close'): void
+        (e: 'created'): void
+        (e: 'updated'): void
+    }
+
+    const props = defineProps<Props>()
+    const emit = defineEmits<Emits>()
+    const { error: showError } = useToast()
+
+    const loading = ref(false)
+    const errors = ref<Record<string, string>>({})
+
+    const form = ref({
+        name: '',
+        description: ''
+    })
+
+    const isEditing = computed(() => !!props.profile?.id)
+    const title = computed(() => isEditing.value ? 'Editar Perfil' : 'Criar Perfil')
+
+    // Reset form when modal opens/closes or profile changes
+    watch([() => props.isVisible, () => props.profile], () => {
+        if (props.isVisible) {
+            resetForm()
+            clearErrors()
+            if (props.profile) {
+                form.value.name = props.profile.name
+                form.value.description = props.profile.description
+            }
+        }
+    })
+
+    const resetForm = () => {
+        form.value = {
+            name: '',
+            description: ''
+        }
+    }
+
+    const clearErrors = () => {
+        errors.value = {}
+    }
+
+    const validateForm = () => {
+        clearErrors()
+        let isValid = true
+
+        if (!form.value.name.trim()) {
+            errors.value.name = 'Nome é obrigatório'
+            isValid = false
+        }
+
+        return isValid
+    }
+
+    const handleSubmit = async () => {
+        if (!validateForm()) return
+
+        loading.value = true
+        clearErrors()
+
+        try {
+            if (isEditing.value) {
+                await updateUser()
+            } else {
+                await createUser()
+            }
+        } catch (error: any) {
+            handleApiErrors(error)
+        } finally {
+            loading.value = false
+        }
+    }
+
+    const createUser = async () => {
+        const response = await api.post('/profile', {
+            name: form.value.name,
+            description: form.value.description
+        })
+
+        if (response.status === 201) {
+            emit('created')
+            closeModal()
+        }
+    }
+
+    const updateUser = async () => {
+        const response = await api.put(`/profile/${props.profile!.id}`, {
+            name: form.value.name,
+            description: form.value.description
+        })
+
+        if (response.status === 200) {
+            emit('updated')
+            closeModal()
+        }
+    }
+
+    const handleApiErrors = (error: any) => {
+        if (error.response?.status === 422) {
+            const validationErrors = error.response.data.errors
+            Object.keys(validationErrors).forEach(key => {
+                errors.value[key] = validationErrors[key][0]
+            })
+        } else {
+            console.error('Erro ao salvar perfil:', error)
+            showError('Erro ao salvar perfil. Tente novamente.')
+        }
+    }
+
+    const closeModal = () => {
+        emit('close')
+    }
+</script>
+
 <template>
     <div v-if="isVisible" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50" @click="closeModal">
         <div class="bg-white rounded-lg shadow-xl w-full max-w-md mx-4" @click.stop>
@@ -77,130 +204,3 @@
         </div>
     </div>
 </template>
-
-<script setup lang="ts">
-import { ref, watch, computed } from 'vue'
-import type { Profile } from '@/types/types'
-import api from '@/services/api'
-import { useToast } from '@/composables/useToast'
-
-interface Props {
-    isVisible: boolean
-    profile?: Profile | null
-}
-
-interface Emits {
-    (e: 'close'): void
-    (e: 'created'): void
-    (e: 'updated'): void
-}
-
-const props = defineProps<Props>()
-const emit = defineEmits<Emits>()
-const { error: showError } = useToast()
-
-const loading = ref(false)
-const errors = ref<Record<string, string>>({})
-
-const form = ref({
-    name: '',
-    description: ''
-})
-
-const isEditing = computed(() => !!props.profile?.id)
-const title = computed(() => isEditing.value ? 'Editar Perfil' : 'Criar Perfil')
-
-// Reset form when modal opens/closes or profile changes
-watch([() => props.isVisible, () => props.profile], () => {
-    if (props.isVisible) {
-        resetForm()
-        clearErrors()
-        if (props.profile) {
-            form.value.name = props.profile.name
-            form.value.description = props.profile.description
-        }
-    }
-})
-
-const resetForm = () => {
-    form.value = {
-        name: '',
-        description: ''
-    }
-}
-
-const clearErrors = () => {
-    errors.value = {}
-}
-
-const validateForm = () => {
-    clearErrors()
-    let isValid = true
-
-    if (!form.value.name.trim()) {
-        errors.value.name = 'Nome é obrigatório'
-        isValid = false
-    }
-
-    return isValid
-}
-
-const handleSubmit = async () => {
-    if (!validateForm()) return
-
-    loading.value = true
-    clearErrors()
-
-    try {
-        if (isEditing.value) {
-            await updateUser()
-        } else {
-            await createUser()
-        }
-    } catch (error: any) {
-        handleApiErrors(error)
-    } finally {
-        loading.value = false
-    }
-}
-
-const createUser = async () => {
-    const response = await api.post('/profile', {
-        name: form.value.name,
-        description: form.value.description
-    })
-
-    if (response.status === 201) {
-        emit('created')
-        closeModal()
-    }
-}
-
-const updateUser = async () => {
-    const response = await api.put(`/profile/${props.profile!.id}`, {
-        name: form.value.name,
-        description: form.value.description
-    })
-
-    if (response.status === 200) {
-        emit('updated')
-        closeModal()
-    }
-}
-
-const handleApiErrors = (error: any) => {
-    if (error.response?.status === 422) {
-        const validationErrors = error.response.data.errors
-        Object.keys(validationErrors).forEach(key => {
-            errors.value[key] = validationErrors[key][0]
-        })
-    } else {
-        console.error('Erro ao salvar perfil:', error)
-        showError('Erro ao salvar perfil. Tente novamente.')
-    }
-}
-
-const closeModal = () => {
-    emit('close')
-}
-</script>

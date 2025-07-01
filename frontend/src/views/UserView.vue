@@ -9,10 +9,12 @@
     import Button from "@/components/ui/button/Button.vue";
     import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell, TableCaption } from "@/components/ui/table";
     import { useToast } from '@/composables/useToast'
+import UserProfilesModal from "@/components/UserProfilesModal/UserProfilesModal.vue";
 
     const { success, error } = useToast()
     const users = ref<User[]>([])
     const showModal = ref(false)
+    const showUserProfilesModal = ref(false)
     const showDeleteDialog = ref(false)
     const selectedUser = ref<User | null>(null)
     const loading = ref({
@@ -44,6 +46,11 @@ const editUser = (user: User) => {
     showModal.value = true
 }
 
+const editUserProfiles = (user: User) => {
+    selectedUser.value = user
+    showUserProfilesModal.value = true
+}
+
 const confirmDeleteUser = (user: User) => {
     selectedUser.value = user
     showDeleteDialog.value = true
@@ -67,8 +74,15 @@ const deleteUser = async () => {
     }
 }
 
+
 const closeModal = () => {
     showModal.value = false
+    selectedUser.value = null
+}
+
+const closeUserProfilesModal = () => {
+    fetchUsers() // Recarrega a lista após editar perfis
+    showUserProfilesModal.value = false
     selectedUser.value = null
 }
 
@@ -96,8 +110,11 @@ onMounted(fetchUsers)
     <div class="min-h-screen bg-gray-50">
         <Header title="Gerenciamento de Usuários" />
 
-        <div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-            <Button @click="createUser" class="mb-4">
+        <div class="flex justify-between w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <Button @click="$router.go(-1)" variant="link" size="lg">
+                Voltar
+            </Button>
+            <Button @click="createUser" variant="outline" size="lg">
                 Adicionar Usuário
             </Button>
         </div>
@@ -135,13 +152,18 @@ onMounted(fetchUsers)
                     <TableCell>{{ user.name }}</TableCell>
                     <TableCell>{{ user.email }}</TableCell>
                     <TableCell>{{ user.profiles.map(profile => profile.name).join(' | ') }}</TableCell>
-                    <TableCell class="text-right">
-                        <Button @click="editUser(user)" class="mr-2" variant="outline" size="sm">
+                    <TableCell class="text-right flex justify-end gap-2.5">
+                        <Button @click="editUserProfiles(user)" variant="default" size="sm">
+                            Editar Perfis
+                        </Button>
+                        <Button @click="editUser(user)"
+                        variant="secondary" size="sm">
                             Editar
                         </Button>
-                        <Button @click="confirmDeleteUser(user)" variant="outline" size="sm">
+                        <Button @click="confirmDeleteUser(user)" variant="destructive" size="sm">
                             Excluir
                         </Button>
+                        
                     </TableCell>
                 </TableRow>
                 <TableRow v-if="users.length === 0">
@@ -152,6 +174,15 @@ onMounted(fetchUsers)
                 </TableBody>
             </Table>
         </main>
+
+        <UserProfilesModal
+            :isVisible="showUserProfilesModal"
+            :user="selectedUser"
+            :profiles="selectedUser?.profiles || []"
+            @close="closeUserProfilesModal"
+            @created="handleUserCreated"
+            @updated="handleUserUpdated">
+        </UserProfilesModal>
 
         <UserModal 
             :isVisible="showModal" 
