@@ -1,14 +1,13 @@
 <script setup lang="ts">
-import { RouterView } from 'vue-router'
-import { onMounted } from 'vue'
-import { useAuthStore } from './stores/auth'
+import { RouterView } from "vue-router";
+import { onMounted } from "vue";
+import { useAuthStore } from "./stores/auth";
 
-const authStore = useAuthStore()
+const authStore = useAuthStore();
 
 onMounted(() => {
-  // Verificar se existe token e validar usuário
-  authStore.checkAuth()
-})
+  // authStore.checkAuth()
+});
 </script>
 
 <template>

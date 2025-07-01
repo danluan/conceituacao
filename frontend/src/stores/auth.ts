@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
+import axios from 'axios'
 
 export interface User {
   id: string
@@ -32,28 +33,26 @@ export const useAuthStore = defineStore('auth', () => {
     error.value = null
 
     try {
-      const response = await fetch('http://localhost:8000/api/auth/register', {
-        method: 'POST',
+      const response = await axios.post('http://localhost:8000/api/auth/register', data, {
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
         },
-        body: JSON.stringify(data),
       })
 
-      const result = await response.json()
+      const result = response.data
 
-      if (!response.ok) {
-        throw new Error(result.message || 'Erro no registro')
-      }
-
-      user.value = result.user.name
+      user.value = result.user
       token.value = result.access_token
       localStorage.setItem('access_token', result.access_token)
 
       return result
     } catch (err) {
-      error.value = err instanceof Error ? err.message : 'Erro desconhecido'
+      if (axios.isAxiosError(err) && err.response) {
+        error.value = err.response.data.message || 'Erro no registro'
+      } else {
+        error.value = err instanceof Error ? err.message : 'Erro desconhecido'
+      }
       throw err
     } finally {
       loading.value = false
@@ -118,11 +117,9 @@ export const useAuthStore = defineStore('auth', () => {
         const userData = await response.json()
         user.value = userData
       } else {
-        // Token inválido, remover
         logout()
       }
     } catch (err) {
-      // Erro na verificação, remover token
       logout()
     }
   }

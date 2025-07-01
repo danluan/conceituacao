@@ -21,27 +21,27 @@ const isSubmitting = ref(false)
 
 const validateForm = () => {
   errors.value = {}
-  
+
   if (!form.name.trim()) {
     errors.value.name = ['O nome é obrigatório']
   }
-  
+
   if (!form.email.trim()) {
     errors.value.email = ['O email é obrigatório']
   } else if (!/\S+@\S+\.\S+/.test(form.email)) {
     errors.value.email = ['Digite um email válido']
   }
-  
+
   if (!form.password) {
     errors.value.password = ['A senha é obrigatória']
   } else if (form.password.length < 6) {
     errors.value.password = ['A senha deve ter pelo menos 6 caracteres']
   }
-  
+
   if (form.password !== form.password_confirmation) {
     errors.value.password_confirmation = ['As senhas não coincidem']
   }
-  
+
   return Object.keys(errors.value).length === 0
 }
 
@@ -55,11 +55,9 @@ const handleSubmit = async () => {
 
   try {
     await authStore.register(form)
-    
-    // Se chegou até aqui, o registro foi bem-sucedido e o usuário já está autenticado
+
     router.push('/')
   } catch (error) {
-    // O erro já é tratado no store
     console.error('Erro no registro:', error)
   } finally {
     isSubmitting.value = false
@@ -68,7 +66,9 @@ const handleSubmit = async () => {
 </script>
 
 <template>
-  <div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+  <div
+    class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8"
+  >
     <div class="max-w-md w-full space-y-8">
       <div>
         <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
@@ -78,7 +78,7 @@ const handleSubmit = async () => {
           Faça seu registro e comece a usar nossa plataforma
         </p>
       </div>
-      
+
       <form class="mt-8 space-y-6" @submit.prevent="handleSubmit">
         <div class="space-y-4">
           <!-- Nome -->
@@ -129,7 +129,11 @@ const handleSubmit = async () => {
               class="mt-1"
             />
             <div v-if="errors.password" class="mt-1">
-              <p v-for="error in errors.password" :key="error" class="text-sm text-red-600">
+              <p
+                v-for="error in errors.password"
+                :key="error"
+                class="text-sm text-red-600"
+              >
                 {{ error }}
               </p>
             </div>
@@ -147,7 +151,11 @@ const handleSubmit = async () => {
               class="mt-1"
             />
             <div v-if="errors.password_confirmation" class="mt-1">
-              <p v-for="error in errors.password_confirmation" :key="error" class="text-sm text-red-600">
+              <p
+                v-for="error in errors.password_confirmation"
+                :key="error"
+                class="text-sm text-red-600"
+              >
                 {{ error }}
               </p>
             </div>
@@ -191,5 +199,4 @@ const handleSubmit = async () => {
   </div>
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>
