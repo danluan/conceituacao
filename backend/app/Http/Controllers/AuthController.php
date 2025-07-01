@@ -63,4 +63,20 @@ class AuthController extends Controller
             'message' => 'Usuário desconectado.'
         ], 200);
     }
+
+    public function user(Request $request)
+    {
+        $user = $request->user()->load('profiles');
+
+        return response()->json([
+            'id' => $user->id,
+            'name' => $user->name,
+            'email' => $user->email,
+            'profiles' => $user->profiles->map(fn($profile) => [
+                'id' => $profile->id,
+                'name' => $profile->name,
+                'description' => $profile->description,
+            ]),
+        ]);
+    }
 }

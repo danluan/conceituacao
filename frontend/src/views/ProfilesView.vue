@@ -40,13 +40,13 @@ const createProfile = () => {
     showModal.value = true
 }
 
-const editProfile = (user: User) => {
-    selectedProfile.value = user
+const editProfile = (profile: Profile) => {
+    selectedProfile.value = profile
     showModal.value = true
 }
 
-const confirmDeleteProfile = (user: User) => {
-    selectedProfile.value = user
+const confirmDeleteProfile = (profile: Profile) => {
+    selectedProfile.value = profile
     showDeleteDialog.value = true
 }
 

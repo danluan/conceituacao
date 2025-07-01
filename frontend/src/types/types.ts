@@ -4,6 +4,7 @@ export interface User {
   email: string;
   profileId: number;
   createdAt: string;
+  profiles: Profile[];
 }
 
 export interface RegisterData {

@@ -121,6 +121,7 @@ onMounted(fetchUsers)
                     </TableHead>
                     <TableHead>Name</TableHead>
                     <TableHead>Email</TableHead>
+                    <TableHead>Perfis</TableHead>
                     <TableHead class="text-right">
                     Ações
                     </TableHead>
@@ -133,6 +134,7 @@ onMounted(fetchUsers)
                     </TableCell>
                     <TableCell>{{ user.name }}</TableCell>
                     <TableCell>{{ user.email }}</TableCell>
+                    <TableCell>{{ user.profiles.map(profile => profile.name).join(' | ') }}</TableCell>
                     <TableCell class="text-right">
                         <Button @click="editUser(user)" class="mr-2" variant="outline" size="sm">
                             Editar

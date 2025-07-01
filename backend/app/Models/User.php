@@ -33,6 +33,22 @@ class User extends Authenticatable
         return $this->profiles()->where('name', $profileName)->exists();
     }
 
+    /**
+     * Função para verificar se o usuário possui um certo perfil por ID.
+     */
+    public function hasProfileById(int $profileId): bool
+    {
+        return $this->profiles()->where('id', $profileId)->exists();
+    }
+
+    /**
+     * Função para obter todos os IDs dos perfis do usuário.
+     */
+    public function getProfileIds(): array
+    {
+        return $this->profiles()->pluck('id')->toArray();
+    }
+
     public function profiles()
     {
         return $this->belongsToMany(Profile::class);
