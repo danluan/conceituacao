@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant hover (&:hover);
+
 :root {
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
@@ -70,12 +72,13 @@
   --sidebar-border: oklch(0.269 0 0);
   --sidebar-ring: oklch(0.439 0 0);
 }
-
 @layer base {
   * {
-    /* @apply border-border outline-ring/50; */
+    border-color: var(--border);
+    outline-color: hsl(from var(--ring) h s l / 0.5);
   }
   body {
-    /* @apply bg-background text-foreground; */
+    background-color: var(--background);
+    color: var(--foreground);
   }
 }

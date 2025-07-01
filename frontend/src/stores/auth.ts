@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import axios from 'axios'
+import api from '@/services/api'
 
 export interface User {
   id: string
@@ -33,12 +34,7 @@ export const useAuthStore = defineStore('auth', () => {
     error.value = null
 
     try {
-      const response = await axios.post('http://localhost:8000/api/auth/register', data, {
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        },
-      })
+      const response = await api.post('/auth/register', data)
 
       const result = response.data
 

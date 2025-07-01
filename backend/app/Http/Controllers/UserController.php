@@ -61,6 +61,7 @@ class UserController extends Controller
         $validated = $request->validate([
             'name' => 'sometimes|string|max:255',
             'email' => 'sometimes|string|email|unique:users,email,' . $user->id,
+            'password'=> 'sometimes|string|min:6|confirmed',
         ]);
 
         $user->update($validated);
