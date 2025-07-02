@@ -1,88 +1,142 @@
-## **Objetivo**
-Criar uma aplicação Laravel para gerenciar usuários e seus perfis, onde cada usuário pode ter múltiplos perfis. O objetivo é avaliar suas habilidades em PHP, Laravel, e boas práticas de desenvolvimento.
+# GUP - General User Profile
 
----
+## Descrição do Projeto
 
-## **Requisitos**
+O **GUP (General User Profile)** é uma simples aplicação web desenvolvida para reforçar técnicas fundamentais no desenvolvimento full-stack com Laravel e Vue.js.
 
-1. **Autenticação de Usuário**:
-   - Implementar um sistema de autenticação que permita o registro, login e logout de usuários.
+A aplicação permite o gerenciamento de perfis de usuários, sendo o perfil ADMINISTRADOR o único com acesso total. A partir dele, é possível gerenciar outros perfis e usuários, atribuindo perfis específicos a cada usuário de forma simples e dinâmica.
 
-2. **Gerenciamento de Usuários**:
-   - Criar um módulo para gerenciar usuários, com as seguintes operações:
-     - Criar
-     - Editar
-     - Excluir
-     - Listar
-    
-   - Validação: Deve impedir o usuário de cadastrar se não fornecer essas informações
-     - name: obrigatório
-     - email: obrigatório
+### Arquitetura
 
-3. **Gerenciamento de Perfis**:
-   - Criar um módulo para gerenciar perfis, com as seguintes operações:
-     - Criar
-     - Editar
-     - Excluir
-     - Listar
-    
-  - Validação: Deve impedir o usuário de cadastrar se não fornecer essas informações
-   - perfil: obrigatório
+A aplicação segue uma arquitetura moderna de separação de responsabilidades:
 
-4. **Cadastrar Perfil Administrador automaticamente (seeder)**:
+- **Backend**: API em Laravel
+- **Frontend**: SPA em Vue.js 3
+- **Banco de Dados**: PostgreSQL
+- **Containerização**: Docker Compose para desenvolvimento
 
-5. **Relacionamento Usuário-Perfis**:
-   - Um usuário pode ter múltiplos perfis (relacionamento muitos-para-muitos).
-   - Criar uma funcionalidade para associar/desassociar perfis a usuários.
-   - Listar os perfis de um usuário.
+### Tecnologias Utilizadas
 
-6. **Controle de Acesso**:
-   - Apenas usuários autenticados podem acessar o sistema.
-   - Apenas usuários com o perfil "Administrador" podem gerenciar perfis e associações.
+#### Backend
 
----
+- **Laravel 12** - Framework PHP moderno
+- **PHP 8.2+** - Linguagem de programação
+- **Laravel Sanctum** - Autenticação de API
+- **PostgreSQL** - Banco de dados relacional
+- **Eloquent ORM** - Mapeamento objeto-relacional
 
-## **Entrega**
+#### Frontend
 
-1. **Repositório**:
-   - Atualize esse repositório.
+- **Vue.js 3** - Framework JavaScript reativo
+- **TypeScript** - Tipagem estática
+- **Vue Router** - Roteamento SPA
+- **Pinia** - Gerenciamento de estado para Autenticação
+- **TailwindCSS** - Framework CSS utilitário
+- **Vite** - Build tool e bundler
+- **Axios** - Cliente HTTP
 
-2. **README-novo do Projeto**:
-   - Crie um novo Readme "Readme-novo.md"
-   - Inclua as seguintes informações:
-     - Descrição do projeto.
-     - Passos para configurar o ambiente.
-     - Como rodar as migrations e seeders.
-     - Usuário e senha de teste para login.
+## Configuração do Ambiente
 
-4. **Pontos de Verificação**:
-   - O sistema deve atender a todos os requisitos mencionados.
+### Requisitos
 
----
+- Git
+- Docker e Docker Compose
+- PHP 8.2+
+- Composer 2.8+
+- NodeJS 22+
+- npm 8+
 
-## **Critérios de Avaliação**
+1. **Clone o repositório, pois é o passo comum entre as duas opções:**
 
-1. **Funcionamento**:
-   - A aplicação atende a todos os requisitos funcionais descritos?
+```bash
+git clone https://github.com/danluan/conceituacao
+cd conceituacao
+```
 
-2. **Interface e Usabilidade**:
-   - A aplicação possui uma interface clara e funcional?
+### Opção 1: Configuração com Docker Compose (Recomendado)
 
-3. **Código**:
-   - O código é legível.
+- Docker e Docker Compose instalados
 
----
+2. Crie um arquivo `.env` baseado no `.env.example`:
 
-## **Configuração do Projeto**
+```bash
+cp .env.example .env
+```
 
-### **Requisitos**
-- PHP >= 8.0
-- Composer
-- Banco de dados relacional (MySQL, Sqlite, PostgreSQL ou outro compatível com Laravel)
-- Laravel >= 10.x
-- Frontend - Livre escolha
+3. Edite o arquivo conforme especificado abaixo:
 
----
+```env
+DB_CONNECTION=pgsql
+DB_HOST=postgres
+DB_PORT=5432
+DB_DATABASE=gup
+DB_USERNAME=postgres
+DB_PASSWORD=admin
+```
 
-## **Commit**
-- Faça o clone deste Readme e suba no seu repositório pessoal
+4. **Inicie os serviços:**
+
+```bash
+docker compose up -d
+```
+
+Assim os serviços devem estar prontos para uso.
+
+### Opção 2: Configuração Manual
+
+#### Backend (Laravel)
+
+1. **Navegue para o diretório do backend:**
+
+```bash
+cd backend
+```
+
+2. **Instale as dependências PHP:**
+
+```bash
+composer install
+```
+
+3. **Configure o banco de dados PostgreSQL:**
+   - Crie um banco chamado `gup`
+   - Configure as credenciais no arquivo `.env` (se necessário)
+
+4. **Execute as migrations e seeders:**
+
+```bash
+php artisan migrate
+php artisan db:seed
+```
+
+5. **Inicie o servidor de desenvolvimento:**
+
+```bash
+php artisan serve
+```
+
+#### Frontend (Vue.js)
+
+1. **Em outro terminal, navegue para o diretório do frontend:**
+
+```bash
+cd frontend
+```
+
+2. **Instale as dependências Node.js:**
+
+```bash
+npm install
+```
+
+3. **Inicie o servidor de desenvolvimento:**
+
+```bash
+npm run dev
+```
+
+## 🔐 Credenciais de Teste
+
+- **Email:** `admin@gup.com`
+- **Senha:** `admin1234`
+- **Perfil:** Administrador com acesso total ao sistema
