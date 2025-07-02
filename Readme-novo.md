@@ -135,7 +135,7 @@ npm install
 npm run dev
 ```
 
-## 🔐 Credenciais de Teste
+## Credenciais de Teste
 
 - **Email:** `admin@gup.com`
 - **Senha:** `admin1234`
