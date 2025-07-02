@@ -95,13 +95,13 @@ onMounted(fetchUsers)
 
 <template>
     <div class="min-h-screen bg-gray-50">
-        <Header title="Gerenciamento de Usuários" />
+        <Header title="Gerenciamento de Perfis" />
 
         <div class="w-full flex justify-between max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
             <Button @click="$router.go(-1)" variant="link" size="lg">
                 Voltar
             </Button>
-            <Button @click="createProfile" class="mb-4">
+            <Button @click="createProfile" variant="outline" size="lg" class="mb-4">
                 Adicionar Perfil
             </Button>
         </div>
@@ -138,10 +138,10 @@ onMounted(fetchUsers)
                     <TableCell>{{ profile.name }}</TableCell>
                     <TableCell>{{ profile.description }}</TableCell>
                     <TableCell class="text-right">
-                        <Button @click="editProfile(profile)" class="mr-2" variant="outline" size="sm">
+                        <Button @click="editProfile(profile)" class="mr-2" variant="secondary" size="sm">
                             Editar
                         </Button>
-                        <Button @click="confirmDeleteProfile(profile)" variant="outline" size="sm">
+                        <Button @click="confirmDeleteProfile(profile)" variant="destructive" size="sm">
                             Excluir
                         </Button>
                     </TableCell>
